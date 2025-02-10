@@ -71,7 +71,9 @@
 /*#endregion*/
 /*#region Хедер*/
 .header {
-
+  display: flex;
+  justify-content: center;
+  align-items: center ;
 
 }
 /*#endregion Хедер*/
