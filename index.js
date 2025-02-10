@@ -2,9 +2,22 @@
 
 //#region Модуль отвечающий за игровой процесс 
 
-const xVSo = (function (){
+const xVSo = (function (doc){
+    const battleField = doc.querySelector(".battleField");
+    battleField.addEventListener("click",(e) => clickLocation(e))
 
-  function boardCreation () {
+    const zoneOfControl = doc.querySelector(".zoneOfControl");
+    zoneOfControl.addEventListener("click", (e)=> {console.log(e)})
+
+    function clickLocation (e) {
+        x = Math.floor(e.offsetX/300)
+        y = Math.floor(e.offsetY/300)
+        boardUpdate(x,y);
+        console.table(board);
+        return {y,x};
+    }
+
+    function boardCreation () {
         let brd = [];
         for (let i = 0; i < 3; i++) {
             brd[i] = [];        
@@ -17,14 +30,17 @@ const xVSo = (function (){
     }
     let board = boardCreation();
 
-    function boardUpdate (x,y,value) {
-        board[x][y] = value;
+    function boardUpdate (x,y,value = 0) {
+        board[y][x] = value;
     }
 
     let whosTurn = Math.round(Math.random());
 
-    return {board, whosTurn,boardUpdate}
-})();
+    return {board, whosTurn,boardUpdate, battleField}
+
+
+
+})(document);
 
 //#endregion
 //#region Модуль Игрок

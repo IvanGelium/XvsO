@@ -81,9 +81,30 @@
 .midbod {
     flex-basis: 500px;
     flex-grow: 0.6;
-    background-color: bisque;
+    background-color: rgb(125, 124, 161);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+  .battle-daddy {
+    padding: 1rem;
+  }
+    .battleField {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(300px,10vw));
+      grid-template-rows: repeat(3,minmax(300px,10vw));
+      background-color: rgb(73, 76, 76);
+
+    }
+
+    .battleField > * {
+      outline: 2px dotted white;
+      background-color: black;
+      z-index: 1;
+      pointer-events: none;
+
+    }
 
 /*#endregion*/
 /*#region Контролс*/
@@ -91,7 +112,17 @@
     flex-basis: 300px;
     flex-grow: 0.2;
     background-color: blueviolet;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+
+  .play-but {
+    height: 30%;
+    width: 20%;
+    background-color: aqua;
+  }
 /*#endregion*/
 /*#region Футер*/
 .footer {
