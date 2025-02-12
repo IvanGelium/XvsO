@@ -26,6 +26,7 @@ const boardG = (function (doc){
 
     function boardUpdate (x,y,value = 0) {
         takenCells.push([x,y]);
+        console.log("Занятые клетки");
         console.log(takenCells);
         board[y][x] = value;
         scr.drawBoard();
@@ -36,10 +37,11 @@ const boardG = (function (doc){
 
     const isTaken = (element) => {
         let match = false;
-        console.log (`Элемент ${element}`);
         for (let i = 0;i<takenCells.length;i++) {
             let k = takenCells[i];
             if (element[0] === k[0] && element[1] === k[1]) {
+                console.log (`Элемент ${element[0]} ${element[1]}`);
+                console.log (`Занятая клетка ${k[0]} ${k[1]}`);
                 match = true;
             }
         }
@@ -59,7 +61,10 @@ const boardG = (function (doc){
                 if (board[i][h] === board[i][k]) {
                     winCount++;
                 }
-                if (winCount === 3) {return "win"};
+                if (winCount === 3) {
+                    
+                    return "win";
+                };
             }
 
             h++;
@@ -117,7 +122,7 @@ const user = (function (doc){
     let pos = {x:0,y:0};
     let isTurn = -1  ;
     const turnRele = function () {
-        console.log (`Ходит ${name}`);
+        // console.log (`Ходит ${name}`);
         isTurn *= -1;
         if (isTurn === 1) {
             battleField.addEventListener("click", clickLocation);
@@ -126,9 +131,12 @@ const user = (function (doc){
     }
     const battleField = doc.querySelector(".battleField");
     function clickLocation (e) {
+        let match;
         pos.x = Math.floor(e.offsetX/300)
         pos.y = Math.floor(e.offsetY/300)
-        console.log (`Игрок выбрал координаты ${pos.x+1} и ${pos.y+1}` );
+        match = boardOb.isTaken([pos.x,pos.y]);
+        if (match === true) { console.log("Клетка занята");return;}
+        // console.log (`Игрок выбрал координаты ${pos.x+1} и ${pos.y+1}` );
         boardOb.boardUpdate(pos.x,pos.y,value  )
     }
 
@@ -150,13 +158,15 @@ const bots = (function (){
     let pos = {x:0,y:0};
 
     const botPlace = () => {
-        //placeholder
-        console.log (`Ходит ${name}`);
+        let match;
+        // console.log (`Ходит ${name}`);
         do {pos.x = Math.floor(Math.random() * 3)
             pos.y = Math.floor(Math.random() * 3)
-            console.log(`Бот думает ${[pos.x,pos.y]}`)
-            if (boardOb.getBoard().flat().includes(2) !== true) {break}
-        } while (boardOb.isTaken([pos.y,pos.x]))
+            console.log(`Бот думает выбрать клетку ${[pos.x,pos.y]}`)
+            match = boardOb.isTaken([pos.x,pos.y]);
+            console.log(`Занята ли эта клетка ${match}`)
+            if (boardOb.getBoard().flat().includes(NaN) !== true) {break}
+        } while (match === true)
 
         boardOb.boardUpdate(pos.x,pos.y,value)
     }
@@ -184,7 +194,7 @@ const turnSys = (function (){
         console.log (`Начинается раунд ${counter}` );
         counter++;
         flipTurn();
-        console.log (whosTurn);
+        // console.log (whosTurn);
         if (whosTurn === 1) {
             player.turnRele();
         }
@@ -210,11 +220,15 @@ const turnSys = (function (){
 //#region Модуль UI
 
 const screenRefresher = (function (doc){
-
+    const button = doc.querySelector(".play-but")
+    button.textContent = "Begin";
     const gridList = doc.querySelectorAll(".grid-obj");
     function drawBoard () {
         for (let i = 0; i < 9; i++) {
             if (typeof boardOb.getBoard().flat()[i] !== "number") {
+                if (boardOb.getBoard().flat()[i] === "X") {
+                    gridList[i].firstElementChild.style.color = "blue";
+                }
                 gridList[i].firstElementChild.textContent = boardOb.getBoard().flat()[i];
             }
             if (typeof boardOb.getBoard().flat()[i] === "number") {
@@ -223,6 +237,11 @@ const screenRefresher = (function (doc){
 
             
         }
+    }
+
+
+    function winDraw (winCells) {
+
     }
 
 
